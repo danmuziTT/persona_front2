@@ -1,10 +1,11 @@
 // types.ts
 
+export type PersonaType = 'D' | 'I' | 'S' | 'C';
+
 export type RootStackParamList = {
-    Intro: undefined;
-    Login: undefined;
-    Signup: undefined;
-    NewPersona: undefined; //로그인 후 데이터 넘겨서 저장할 것. 테스트 용이므로 비워놓음
-    PersonaDetail: { type: string }; //유형 넘길 것 
-  };
-  
+  Intro: undefined;
+  Login: undefined;
+  Signup: undefined;
+  NewPersona: undefined;
+  PersonaDetail: { type: PersonaType };
+};

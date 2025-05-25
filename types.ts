@@ -7,5 +7,9 @@ export type RootStackParamList = {
   Login: undefined;
   Signup: undefined;
   NewPersona: undefined;
+  ChatList: undefined;
+  ChatSummaryList: undefined;
+  ChatSummary: { roomId: string };
+  ChatRoom: { roomId: string };
   PersonaDetail: { type: PersonaType };
 };

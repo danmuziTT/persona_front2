@@ -54,7 +54,7 @@ const PersonaDetail = ({ route }: Props) => {
   const handlePressSubmit = () => {
     const roomId = `persona-${type}-${Date.now()}`;
     createRoomIfNotExists(roomId);
-    navigation.navigate('ChatRoom', { roomId });
+    navigation.navigate('ChatRoom', { roomId, type: type as PersonaType });
   };
 
   const generateRandomName = (length: number = 3) => {

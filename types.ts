@@ -10,6 +10,6 @@ export type RootStackParamList = {
   ChatList: undefined;
   ChatSummaryList: undefined;
   ChatSummary: { roomId: string };
-  ChatRoom: { roomId: string };
+  ChatRoom: { roomId: string; type: PersonaType };
   PersonaDetail: { type: PersonaType };
 };

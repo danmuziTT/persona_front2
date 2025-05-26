@@ -83,7 +83,6 @@ export default function ChatRoomScreen() {
   }
 
   return (
-    <ScreenWrapper>
       <LinearGradient colors={['#DEE5F6', '#FAEDFA']} style={styles.gradient}>
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
           <SafeAreaView style={styles.safeArea}>
@@ -114,7 +113,6 @@ export default function ChatRoomScreen() {
           </SafeAreaView>
         </TouchableWithoutFeedback>
       </LinearGradient>
-    </ScreenWrapper>
   );
 }
 

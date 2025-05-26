@@ -1,7 +1,7 @@
   import React from 'react';
   import { NavigationContainer } from '@react-navigation/native';
   import { createStackNavigator } from '@react-navigation/stack';
-  import { StatusBar } from 'react-native';
+  import { StatusBar, Text, TouchableOpacity } from 'react-native';
 
   import IntroScreen from './pages/IntroScreen';
   import LoginScreen from './pages/LoginScreen';
@@ -39,7 +39,21 @@
           }}
         >
           <Stack.Screen name="ChatList" component={ChatListScreen} />
-          <Stack.Screen name="ChatRoom" component={ChatRoomScreen} options={{ headerShown: true }}/>
+          <Stack.Screen
+  name="ChatRoom"
+  component={ChatRoomScreen}
+  options={({ navigation }) => ({
+    headerShown: true,
+    headerLeft: () => (
+      <TouchableOpacity
+        onPress={() => navigation.navigate('ChatList')}
+        style={{ marginLeft: 15 }}
+      >
+        <Text style={{ fontSize: 16, color: '#000' }}>{'<'} 뒤로</Text>
+      </TouchableOpacity>
+    ),
+  })}
+/>
           <Stack.Screen name="Intro" component={IntroScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />

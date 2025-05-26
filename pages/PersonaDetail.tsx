@@ -12,6 +12,7 @@ import SubmitButton from '../components/newDetail/SubmitButton';
 import MenuText from '../components/newDetail/MenuText';
 import MenuTextName from '../components/newDetail/MenuTextName.tsx';
 import { useChatStore } from '../store/useChatStore';
+import ScreenWrapper from '../layouts/ScreenWrapper.tsx';
 
 type Props = {
   route: RouteProp<RootStackParamList, 'PersonaDetail'>;
@@ -81,6 +82,7 @@ const PersonaDetail = ({ route }: Props) => {
   }, [isFocused]);
 
   return (
+    <ScreenWrapper>
     <LinearGradient colors={['#FFFFFF', backgroundColor]} style={styles.container}>
       <View style={styles.middleContent}>
         <MenuTextName>{'내 이름은 ' + name + ' 입니다.'}</MenuTextName>
@@ -93,6 +95,7 @@ const PersonaDetail = ({ route }: Props) => {
         <SubmitButton onPress={handlePressSubmit} enabled={!!isButtonEnabled} backgroundColor={selectedColor} />
       </View>
     </LinearGradient>
+    </ScreenWrapper>
   );
 };
 

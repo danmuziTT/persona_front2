@@ -30,12 +30,16 @@ export default function ChatListScreen() {
             keyExtractor={(roomId) => roomId}
             renderItem={({ item: roomId }) => {
               const room = chatRooms[roomId];
+              const aiName = 'AI'; //현재 AI이름을 ai로 통일 
+              //const aiName = room?.aiName || 'AI';
               const lastMessage = room?.messages[room.messages.length - 1]?.text || '(대화 없음)';
+              
               return (
                 <TouchableOpacity
                   style={styles.item}
                   onPress={() => navigation.navigate('ChatRoom', { roomId })}
                 >
+                  <Text style={styles.aiName}>{aiName}</Text>
                   <Text style={styles.message}>{lastMessage}</Text>
                 </TouchableOpacity>
               );
@@ -66,6 +70,12 @@ const styles = StyleSheet.create({
     backgroundColor: '#d6e4ff',
     borderRadius: 12,
     marginBottom: 12,
+  },
+  aiName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#555',
+    marginBottom: 4,
   },
   message: {
     fontSize: 16,

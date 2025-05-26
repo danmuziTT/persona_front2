@@ -1,3 +1,5 @@
+// ChatRoomScreen.tsx
+
 import React, { useRef, useEffect } from 'react';
 import {
   View,
@@ -15,12 +17,14 @@ import ChatInput from '../components/Chat/ChatInput';
 import { useChatStore } from '../store/useChatStore';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../types';
-import ScreenWrapper from '../layouts/ScreenWrapper'; // ✅ 추가
+import ScreenWrapper from '../layouts/ScreenWrapper';
+import LinearGradient from 'react-native-linear-gradient';
 
 interface Message {
   id: string;
   text: string;
   isUser: boolean;
+  timestamp: number;
 }
 
 type ChatRoomScreenRouteProp = RouteProp<RootStackParamList, 'ChatRoom'>;
@@ -50,16 +54,20 @@ export default function ChatRoomScreen() {
   const handleSend = (text: string) => {
     if (!roomId) return;
 
+    const now = Date.now();
+
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: now.toString(),
       text,
       isUser: true,
+      timestamp: now,
     };
 
     const aiMessage: Message = {
-      id: (Date.now() + 1).toString(),
+      id: (now + 1).toString(),
       text: 'AI 응답입니다.',
       isUser: false,
+      timestamp: now + 1,
     };
 
     sendMessage(roomId, userMessage);
@@ -76,45 +84,53 @@ export default function ChatRoomScreen() {
 
   return (
     <ScreenWrapper>
-      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-        <SafeAreaView style={styles.safeArea}>
-          <KeyboardAvoidingView
-            style={styles.container}
-            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 20}
-          >
-            <View style={styles.inner}>
-              <FlatList
-                ref={flatListRef}
-                data={messages}
-                keyExtractor={(item) => item.id}
-                renderItem={({ item }) => (
-                  <ChatBubble text={item.text} isUser={item.isUser} />
-                )}
-                contentContainerStyle={styles.list}
-                keyboardShouldPersistTaps="handled"
-                showsVerticalScrollIndicator={false}
-              />
-              <ChatInput onSend={handleSend} />
-            </View>
-          </KeyboardAvoidingView>
-        </SafeAreaView>
-      </TouchableWithoutFeedback>
+      <LinearGradient colors={['#DEE5F6', '#FAEDFA']} style={styles.gradient}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <SafeAreaView style={styles.safeArea}>
+            <KeyboardAvoidingView
+              style={styles.container}
+              behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+              keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 20}
+            >
+              <View style={styles.inner}>
+                <FlatList
+                  ref={flatListRef}
+                  data={messages}
+                  keyExtractor={(item) => item.id}
+                  renderItem={({ item }) => (
+                    <ChatBubble
+                      text={item.text}
+                      isUser={item.isUser}
+                      timestamp={item.timestamp}
+                    />
+                  )}
+                  contentContainerStyle={styles.list}
+                  keyboardShouldPersistTaps="handled"
+                  showsVerticalScrollIndicator={false}
+                />
+                <ChatInput onSend={handleSend} />
+              </View>
+            </KeyboardAvoidingView>
+          </SafeAreaView>
+        </TouchableWithoutFeedback>
+      </LinearGradient>
     </ScreenWrapper>
   );
 }
 
 const styles = StyleSheet.create({
+  gradient: {
+    flex: 1,
+  },
   safeArea: {
     flex: 1,
-    backgroundColor: 'white',
   },
   container: {
     flex: 1,
   },
   inner: {
-    flex: 1,
-    justifyContent: 'flex-end',
+    flex: 1, // 이 부분이 중요합니다! 전체 높이를 차지하게 만들어야 함
+    justifyContent: 'flex-end', // 입력란을 맨 아래로 내림
   },
   list: {
     padding: 12,

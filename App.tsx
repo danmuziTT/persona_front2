@@ -26,7 +26,7 @@
 
         {/* 모든 화면에서 상단 헤더 숨기기 */}
         <Stack.Navigator
-          initialRouteName="NewPersona"
+          initialRouteName="NewPersona" //Intro 변경 시 로그인 창 나오게 됨
           screenOptions={{ headerShown: false }}
         >
           <Stack.Screen name="ChatList" component={ChatListScreen} />

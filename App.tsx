@@ -27,17 +27,26 @@
         {/* 모든 화면에서 상단 헤더 숨기기 */}
         <Stack.Navigator
           initialRouteName="NewPersona" //Intro 변경 시 로그인 창 나오게 됨
-          screenOptions={{ headerShown: false }}
+          screenOptions={{
+            headerShown: false,  // 전체 헤더 보이게 하거나, 개별 설정 가능
+            headerStyle: {
+              backgroundColor: '#DEE5F6', 
+            },
+            headerTintColor: '#000', // 헤더 텍스트(타이틀)와 아이콘 색상 (흰색)
+            headerTitleStyle: {
+              fontWeight: 'normal', // 타이틀 폰트 굵기 등 추가 스타일 가능
+            },
+          }}
         >
           <Stack.Screen name="ChatList" component={ChatListScreen} />
-          <Stack.Screen name="ChatRoom" component={ChatRoomScreen} />
+          <Stack.Screen name="ChatRoom" component={ChatRoomScreen} options={{ headerShown: true }}/>
           <Stack.Screen name="Intro" component={IntroScreen} />
           <Stack.Screen name="Login" component={LoginScreen} />
           <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="ChatSummaryList" component={ChatSummaryListScreen} />
           <Stack.Screen name="ChatSummary" component={ChatSummaryScreen} />
           <Stack.Screen name="NewPersona" component={NewPersona} />
-          <Stack.Screen name="PersonaDetail" component={PersonaDetail} options={{ headerShown: false }}/>
+          <Stack.Screen name="PersonaDetail" component={PersonaDetail}/>
         </Stack.Navigator>
       </NavigationContainer>
     );

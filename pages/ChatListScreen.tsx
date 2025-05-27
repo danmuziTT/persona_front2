@@ -31,13 +31,15 @@ export default function ChatListScreen() {
             renderItem={({ item: roomId }) => {
               const room = chatRooms[roomId];
               const aiName = 'AI'; //현재 AI이름을 ai로 통일 
+              const type = 'D';
+              const genderCode = 'W' //백과 연결 , 디스크 성격과 성별 
               //const aiName = room?.aiName || 'AI';
               const lastMessage = room?.messages[room.messages.length - 1]?.text || '(대화 없음)';
               
               return (
                 <TouchableOpacity
                   style={styles.item}
-                  onPress={() => navigation.navigate('ChatRoom', { roomId })}
+                  onPress={() => navigation.navigate('ChatRoom', {roomId, type: type, gender: genderCode})}
                 >
                   <Text style={styles.aiName}>{aiName}</Text>
                   <Text style={styles.message}>{lastMessage}</Text>

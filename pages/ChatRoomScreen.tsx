@@ -1,6 +1,4 @@
-// ChatRoomScreen.tsx
-
-import React, { useRef, useEffect } from 'react';
+import React, { useRef, useEffect, useState } from 'react';
 import {
   View,
   FlatList,
@@ -16,8 +14,9 @@ import ChatBubble from '../components/Chat/MessageBubble';
 import ChatInput from '../components/Chat/ChatInput';
 import { useChatStore } from '../store/useChatStore';
 import { useRoute, RouteProp, useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../types';
+import { GenderType, PersonaType, RootStackParamList } from '../types';
 import LinearGradient from 'react-native-linear-gradient';
+import { RNCamera } from 'react-native-camera';
 
 interface Message {
   id: string;
@@ -34,9 +33,17 @@ export default function ChatRoomScreen() {
   const navigation = useNavigation();
 
   const roomId = route?.params?.roomId;
-  const discType = route?.params?.type ?? 'D'; // 디스크 타입 기본값 D
+  
+  type AvatarKey = `${GenderType}${PersonaType}`;
+
+  const { type, gender: routeGender } = route.params; // routeGender로 이름 변경
+  const avatarKey = (routeGender + type) as AvatarKey;
+  
+  // const discType = avatarKey.charAt(1) as PersonaType;  // 'D' | 'I' | 'S' | 'C'
+  // const gender = avatarKey.charAt(0) as GenderType;     // 'W' or 'M'
 
   const { chatRooms, sendMessage, createRoomIfNotExists } = useChatStore();
+  const [showCamera, setShowCamera] = useState(false);
 
   useEffect(() => {
     if (!roomId) {
@@ -75,6 +82,10 @@ export default function ChatRoomScreen() {
     sendMessage(roomId, aiMessage);
   };
 
+  const toggleCamera = () => {
+    setShowCamera((prev) => !prev);
+  };
+
   if (!roomId) {
     return (
       <View style={styles.errorContainer}>
@@ -93,6 +104,15 @@ export default function ChatRoomScreen() {
             keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 20}
           >
             <View style={styles.inner}>
+              {showCamera && (
+                <View style={styles.cameraContainer}>
+                  <RNCamera
+                    style={styles.camera}
+                    type={RNCamera.Constants.Type.back}
+                    captureAudio={false}
+                  />
+                </View>
+              )}
               <FlatList
                 ref={flatListRef}
                 data={messages}
@@ -102,14 +122,16 @@ export default function ChatRoomScreen() {
                     text={item.text}
                     isUser={item.isUser}
                     timestamp={item.timestamp}
-                    discType={discType} // ✅ 전달됨
-                  />
+                    discType={avatarKey.charAt(1) as PersonaType}  // 'D' | 'I' | 'S' | 'C'
+                    gender={avatarKey.charAt(0) as GenderType}
+                   // AvatarKey = {AvatarKey}
+                />  
                 )}
                 contentContainerStyle={styles.list}
                 keyboardShouldPersistTaps="handled"
                 showsVerticalScrollIndicator={false}
               />
-              <ChatInput onSend={handleSend} />
+              <ChatInput onSend={handleSend} onCameraToggle={toggleCamera} cameraOn={showCamera} />
             </View>
           </KeyboardAvoidingView>
         </SafeAreaView>
@@ -119,26 +141,17 @@ export default function ChatRoomScreen() {
 }
 
 const styles = StyleSheet.create({
-  gradient: {
-    flex: 1,
+  gradient: { flex: 1 },
+  safeArea: { flex: 1 },
+  container: { flex: 1 },
+  inner: { flex: 1, justifyContent: 'flex-end' },
+  list: { padding: 12, paddingBottom: 8 },
+  errorContainer: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+  cameraContainer: {
+    height: '50%',
+    width: '100%',
   },
-  safeArea: {
+  camera: {
     flex: 1,
-  },
-  container: {
-    flex: 1,
-  },
-  inner: {
-    flex: 1,
-    justifyContent: 'flex-end',
-  },
-  list: {
-    padding: 12,
-    paddingBottom: 8,
-  },
-  errorContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
 });

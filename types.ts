@@ -1,6 +1,7 @@
 // types.ts
 
 export type PersonaType = 'D' | 'I' | 'S' | 'C';
+export type GenderType = 'W' | 'M';
 
 export type RootStackParamList = {
   Intro: undefined;
@@ -10,6 +11,6 @@ export type RootStackParamList = {
   ChatList: undefined;
   ChatSummaryList: undefined;
   ChatSummary: { roomId: string };
-  ChatRoom: { roomId: string; type: PersonaType };
+  ChatRoom: { roomId: string; type: PersonaType; gender: GenderType};
   PersonaDetail: { type: PersonaType };
 };

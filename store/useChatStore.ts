@@ -15,6 +15,7 @@ interface ChatStore {
   chatRooms: Record<string, ChatRoom>;
   sendMessage: (roomId: string, message: Message) => void;
   createRoomIfNotExists: (roomId: string) => void;
+  removeChatRoom: (roomId: string) => void; // ✅ 삭제 함수 추가
 }
 
 export const useChatStore = create<ChatStore>((set) => ({
@@ -46,5 +47,12 @@ export const useChatStore = create<ChatStore>((set) => ({
           },
         },
       };
+    }),
+
+  removeChatRoom: (roomId) => // ✅ 삭제 구현
+    set((state) => {
+      const newChatRooms = { ...state.chatRooms };
+      delete newChatRooms[roomId];
+      return { chatRooms: newChatRooms };
     }),
 }));
